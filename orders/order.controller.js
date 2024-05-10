@@ -10,7 +10,7 @@ const newOrder = {
     lastname: 'Saenz',
     email: 'sdsaenz@example.com',
     password: '123456'
-};
+}
 
 const testFunction = async () => {
     //const usuario = await getUser("sdsaenz@uninorte.edu.co", "email");
@@ -19,6 +19,5 @@ const testFunction = async () => {
     //console.log(libro)
     updateOrder(libro._id,{publicationYear:2024})
 }
-
 
 testFunction();

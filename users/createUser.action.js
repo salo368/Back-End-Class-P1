@@ -13,6 +13,7 @@ async function createUser(user) {
         await newUser.save()
 
         console.log('Usuario creado exitosamente')
+        return newUser
     } catch (error) {
         console.error('Error al crear usuario:', error)
     } finally {
