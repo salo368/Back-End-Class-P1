@@ -1,13 +1,23 @@
 
-const { createUser, getUserByEmail, getUserById, updateUser, softDeleteUser  } = require('./createUser.action');
+const {createUser} = require('./createUser.action');
+const {softDeleteUser} = require('./deleteUser.action');
+const {getUser} = require('./readUser.action');
+const {updateUser} = require('./updateUser.action');
 
-(async () => {
+
+const newUser = {
+    name: 'Salomon',
+    lastname: 'Saenz',
+    email: 'sdsaenz@example.com',
+    password: '123456'
+};
+
+const obtenerUsuario = async () => {
     
-    const usuario = await getUserByEmail('sdsaenz@uninorte.edu.co');
-    //updateUser(usuario._id,{email:'sdsaenz@uninorte.edu.co'});
-})();
-
-// async function getUserByEmail(email) {
-
+    usuario = await getUser("sdsaenz@uninorte.edu.co", "email")
+    getUser(usuario._id,"id")
     
-// }
+}
+  
+obtenerUsuario();
+  
