@@ -1,11 +1,11 @@
 
-const {createBook} = require('./createBook.action')
-const {updateBook} = require('./updateBook.action')
-const {softDeleteBook} = require('./deleteBook.action')
-const {getBook, getBooks} = require('./readBook.action')
+const {createOrder} = require('./createOrder.action')
+const {updateOrder} = require('./updateOrder.action')
+const {softDeleteOrder} = require('./deleteOrder.action')
+const {getOrder, getOrders} = require('./readOrder.action')
 const {getUser} = require('../users/readUser.action')
 
-const newBook = {
+const newOrder = {
     name: 'Salomon',
     lastname: 'Saenz',
     email: 'sdsaenz@example.com',
@@ -14,10 +14,10 @@ const newBook = {
 
 const testFunction = async () => {
     //const usuario = await getUser("sdsaenz@uninorte.edu.co", "email");
-    const libros = await getBooks("name", "1984")
+    const libros = await getOrders("name", "1984")
     const libro = libros[0]
     //console.log(libro)
-    updateBook(libro._id,{publicationYear:2024})
+    updateOrder(libro._id,{publicationYear:2024})
 }
 
 
