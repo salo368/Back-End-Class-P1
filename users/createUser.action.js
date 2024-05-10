@@ -1,8 +1,23 @@
+const mongoose = require('mongoose')
+const User = require("./user.model")
 
-const { createUser, getUserByEmail, getUserById, updateUser, softDeleteUser  } = require('./user.model');
+async function createUser(user) {
+    try {
 
-(async () => {
-    
-    const usuario = await getUserByEmail('sdsaenz@uninorte.edu.co');
-    //updateUser(usuario._id,{email:'sdsaenz@uninorte.edu.co'});
-})();
+        await mongoose.connect('mongodb+srv://salomonAdmin:o3Iw3Q9TpK09rSNU@backendclass.4l7vjkd.mongodb.net/backEndClass',{
+            dbName: 'backEndClass' 
+        })
+
+        const newUser = new User(user)
+
+        await newUser.save()
+
+        console.log('Usuario creado exitosamente')
+    } catch (error) {
+        console.error('Error al crear usuario:', error)
+    } finally {
+        mongoose.disconnect()
+    }
+}
+
+module.exports = {createUser}
