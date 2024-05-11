@@ -30,7 +30,7 @@ async function getBooks(filterData) {
             dbName: 'backEndClass' 
         })
 
-        const books = await Book.find(filterData)
+        const books = await Book.find({ ...filterData, softDelete: false }).select('-softDelete')
 
         if (books.length === 0) {
             console.log('No se encontraron libros con el filtro especificado')

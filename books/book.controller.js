@@ -4,7 +4,6 @@ const {createBook} = require('./createBook.action')
 const {updateBook} = require('./updateBook.action')
 const {softDeleteBook} = require('./deleteBook.action')
 const {getBook, getBooks} = require('./readBook.action')
-const {getUser} = require('../users/readUser.action')
 
 const BookModel = require("./book.model")
 
@@ -67,7 +66,6 @@ async function updateBookData(token, bookId ,newData) {
 
         const bookData = await getBook(bookId)
         
-
         if (bookData.ownerId.toString() === userId){
             const updatedBook = await updateBook(bookId,newData)
             return updatedBook
@@ -117,7 +115,7 @@ async function getBooksUserList(token) {
 
         const Books = await getBooks({"ownerId": userId})
 
-        console.log(Books)
+        //console.log(Books)
         return Books
     } catch (error) {
         console.error('Error al obtener los libros:', error)
@@ -150,6 +148,30 @@ async function getBooksListByFilter(filter) {
 
 }
 
+async function deleteBook(token, bookId) {
+    try {
+        const decodedToken = tokenVerification(token)
+
+        if (!decodedToken) {
+            throw new Error('Token inválido o expirado')
+        }
+        const userId = decodedToken.userId
+
+        const bookData = await getBook(bookId)
+        
+        if (bookData.ownerId.toString() === userId){
+            const updatedBook = await softDeleteBook(bookId)
+            return { message: 'Libro eliminado exitosamente' }
+        }else{
+            throw new Error('El libro no pertenece al usuario')
+        }
+
+    } catch (error) {
+        console.error('Error al actualizar los datos del usuario:', error)
+        throw error
+    }
+}
+
 tokenn="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjNlOTYyY2NkYzhhNDk2NzdiMGU1MDIiLCJpYXQiOjE3MTUzNzkyMTgsImV4cCI6MTcxNzk3MTIxOH0.ovWdbygWxJWVXjq8iFDukamTjyVciwlOtLtNqN3pzsw"
 
 //getBooksUserList(tokenn)
@@ -168,10 +190,8 @@ const functionNode = async () => {
     
     lista = await getBooksUserList(tokenn)
     //lista = await getBooksListByFilter({"genre": "Fiction, Dystopian"})
-    listtt = lista[5]
-    updateBookData(tokenn,listtt._id,{"publisher": "Mangas Piratisticos"})
-
-
+    // listtt = lista[5]
+    // deleteBook(tokenn,listtt._id)
 }
 
 functionNode()
