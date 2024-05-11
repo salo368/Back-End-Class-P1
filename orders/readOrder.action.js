@@ -24,26 +24,23 @@ async function getOrder(id) {
     }
 }
 
-async function getOrders(identifier, type) {
+async function getOrders(filterData) {
     try {
         await mongoose.connect('mongodb+srv://salomonAdmin:o3Iw3Q9TpK09rSNU@backendclass.4l7vjkd.mongodb.net/backEndClass',{
             dbName: 'backEndClass' 
         })
 
-        let filter = {}
-        filter[identifier] = type
+        const books = await Order.find({ ...filterData, softDelete: false }).select('-softDelete')
 
-        const orders = await Order.find(filter)
-
-        if (orders.length === 0) {
-            console.log('No se encontraron ordenes con el filtro especificado')
+        if (books.length === 0) {
+            console.log('No se encontraron libros con el filtro especificado')
             return []
         }
 
-        console.log('Ordenes encontradas:', orders)
-        return orders
+        console.log('Libros encontrados:', books)
+        return books
     } catch (error) {
-        console.error('Error al obtener ordenes:', error)
+        console.error('Error al obtener libros:', error)
         return []
     } finally {
         mongoose.disconnect()

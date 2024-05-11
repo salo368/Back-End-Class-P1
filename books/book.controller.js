@@ -188,10 +188,12 @@ tokenn="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjNlOTYyY2NkYzhhNDk
 
 const functionNode = async () => {
     
-    lista = await getBooksUserList(tokenn)
+    //lista = await getBooksUserList(tokenn)
     //lista = await getBooksListByFilter({"genre": "Fiction, Dystopian"})
     // listtt = lista[5]
-    // deleteBook(tokenn,listtt._id)
+    //deleteBook(tokenn,listtt._id)
+    // lista=["663eab1c58e9637c726","663eb67eae9063e46c5f53c9","663eab84a675d1ef6d5b1f1c"]
+    // getBooksByIds(lista)
 }
 
 functionNode()

@@ -24,6 +24,29 @@ async function getBook(id) {
     }
 }
 
+async function getBooksByIds(ids) {
+    try {
+        await mongoose.connect('mongodb+srv://salomonAdmin:o3Iw3Q9TpK09rSNU@backendclass.4l7vjkd.mongodb.net/backEndClass',{
+            dbName: 'backEndClass' 
+        })
+
+        const books = await Book.find({ _id: { $in: ids }, softDelete: false }).select('-softDelete')
+
+        if (!books || books.length === 0) {
+            console.log('Ningún libro encontrado con los IDs proporcionados')
+            return []
+        }
+
+        console.log('Libros encontrados:', books)
+        return books
+    } catch (error) {
+        console.error('Error al obtener libros:', error)
+        return []
+    } finally {
+        mongoose.disconnect()
+    }
+}
+
 async function getBooks(filterData) {
     try {
         await mongoose.connect('mongodb+srv://salomonAdmin:o3Iw3Q9TpK09rSNU@backendclass.4l7vjkd.mongodb.net/backEndClass',{
@@ -49,4 +72,4 @@ async function getBooks(filterData) {
 
 
 
-module.exports = {getBook, getBooks}
+module.exports = {getBook, getBooks,getBooksByIds}

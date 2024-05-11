@@ -136,9 +136,9 @@ async function getUserData(token) {
 }
 
 const userData = {
-    name: 'Salomon',
+    name: 'Samuel',
     lastname: 'Saenz',
-    email: 'sdsaenz@example.com',
+    email: 'smsaenz@example.com',
     password: 'elgatico',
     books: [],
     receivedOrders: [],
@@ -147,9 +147,11 @@ const userData = {
 }
 
 tokenn="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjNlOTYyY2NkYzhhNDk2NzdiMGU1MDIiLCJpYXQiOjE3MTUzNzkyMTgsImV4cCI6MTcxNzk3MTIxOH0.ovWdbygWxJWVXjq8iFDukamTjyVciwlOtLtNqN3pzsw"
-
+tokenn2="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjNmZGYzOGNmNjRhOTkwMjY2YWMzNDMiLCJpYXQiOjE3MTU0NjE5NDQsImV4cCI6MTcxODA1Mzk0NH0.JPbZGJAV9wiM8mLhRHOkZ5VMpPHolOt24ICqlBVLjwQ"
 //console.log(updateUserData(tokenn,{lastname:"Saenz Giraldo"}))
 //login("sdsaenz@example.com","elgatico")
 //deleteUser(tokenn)
 //getUserData(tokenn)
 //getUserBooks(tokenn)
+
+login("smsaenz@example.com","elgatico")
