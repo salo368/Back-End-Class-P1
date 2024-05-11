@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const argon2 = require('argon2')
+
 const { createUser } = require('./createUser.action')
 const { softDeleteUser } = require('./deleteUser.action')
 const { getUser } = require('./readUser.action')
@@ -9,7 +10,7 @@ const UserModel = require("./user.model")
 
 keyJWT="e3c6bedeefc5043740ecd268d679f522" //pasar a env
 
-function tokenVerification(token) {
+function tokenVerification(token) { //pasar a una carpeta de funciones
     try {
         
         return jwt.verify(token, keyJWT)
@@ -124,9 +125,10 @@ async function getUserData(token) {
 
         const userId = decodedToken.userId
 
-        const userData = await getUser(userId)
+        const UserData = await getUser(userId, "id");
 
-        return userData
+        console.log(UserData)
+        return UserData
     } catch (error) {
         console.error('Error al obtener los datos del usuario:', error)
         throw error
@@ -146,5 +148,8 @@ const userData = {
 
 tokenn="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjNlOTYyY2NkYzhhNDk2NzdiMGU1MDIiLCJpYXQiOjE3MTUzNzkyMTgsImV4cCI6MTcxNzk3MTIxOH0.ovWdbygWxJWVXjq8iFDukamTjyVciwlOtLtNqN3pzsw"
 
-console.log(updateUserData(tokenn,{lastname:"Saenz Giraldo"}))
+//console.log(updateUserData(tokenn,{lastname:"Saenz Giraldo"}))
 //login("sdsaenz@example.com","elgatico")
+//deleteUser(tokenn)
+//getUserData(tokenn)
+//getUserBooks(tokenn)
