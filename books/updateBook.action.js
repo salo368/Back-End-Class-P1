@@ -6,7 +6,7 @@ async function updateBook(id, updatedBook) {
         await mongoose.connect('mongodb+srv://salomonAdmin:o3Iw3Q9TpK09rSNU@backendclass.4l7vjkd.mongodb.net/backEndClass',{
             dbName: 'backEndClass' 
         })
-
+        
         const book = await Book.findOneAndUpdate({ _id: id, softDelete: false }, updatedBook, { new: true }).select('-softDelete')
 
         if (!book) {

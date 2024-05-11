@@ -24,16 +24,13 @@ async function getBook(id) {
     }
 }
 
-async function getBooks(identifier, type) {
+async function getBooks(filterData) {
     try {
         await mongoose.connect('mongodb+srv://salomonAdmin:o3Iw3Q9TpK09rSNU@backendclass.4l7vjkd.mongodb.net/backEndClass',{
             dbName: 'backEndClass' 
         })
 
-        let filter = {}
-        filter[identifier] = type
-
-        const books = await Book.find(filter)
+        const books = await Book.find(filterData)
 
         if (books.length === 0) {
             console.log('No se encontraron libros con el filtro especificado')
@@ -49,6 +46,7 @@ async function getBooks(identifier, type) {
         mongoose.disconnect()
     }
 }
+
 
 
 module.exports = {getBook, getBooks}
