@@ -78,14 +78,15 @@ async function deleteUser(req) {
 }
 
 async function getUserData(req) {
-
-    const userData = await getUser(req.userId,"id")
-    if (userData){
-        return { value: {userData : userData}, code: 200 }
-    }else{
-        return { value: {message: 'User does not exist'}, code: 404 }
+    const userData = await getUser(req.userId, "id");
+    userData.password = undefined
+    if (userData) {
+        return { value: { userData: userData }, code: 200 };
+    } else {
+        return { value: { message: 'User does not exist' }, code: 404 };
     }
 }
+
 
 module.exports={
     login,

@@ -6,6 +6,7 @@ const bookSchema = new mongoose.Schema({
     publicationYear: { type: Number, required: true  },
     publisher: { type: String, required: true },
     author: { type: String, required: true },
+    price: { type: Number, required: true },
     ownerId: { type: mongoose.Schema.Types.ObjectId, required: true },
     softDelete: { type: Boolean, default: false }
 }, { versionKey: false })
