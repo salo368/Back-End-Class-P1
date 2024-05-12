@@ -10,14 +10,14 @@ async function updateUser(id, updatedUser) {
         const user = await User.findOneAndUpdate({ _id: id, softDelete: false }, updatedUser, { new: true }).select('-softDelete')
 
         if (!user) {
-            console.log('Usuario no encontrado o ya eliminado')
+            //console.log('Usuario no encontrado o ya eliminado')
             return null
         }
 
-        console.log('Usuario actualizado:', user)
+        //console.log('Usuario actualizado:', user)
         return user
     } catch (error) {
-        console.error('Error al actualizar usuario:', error)
+        //console.error('Error al actualizar usuario:', error)
         return null
     } finally {
         mongoose.disconnect()

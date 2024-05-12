@@ -18,14 +18,14 @@ async function getUser(identifier, type) {
         const user = await User.findOne(query).select('-softDelete')
 
         if (!user) {
-            console.log('Usuario no encontrado')
+            //console.log('Usuario no encontrado')
             return null
         }
 
-        console.log('Usuario encontrado:', user)
+        //console.log('Usuario encontrado:', user)
         return user
     } catch (error) {
-        console.error('Error al obtener usuario:', error)
+        //console.error('Error al obtener usuario:', error)
         return null
     } finally {
         mongoose.disconnect()
