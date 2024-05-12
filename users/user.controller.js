@@ -5,6 +5,7 @@ const { createUser } = require('./createUser.action')
 const { softDeleteUser } = require('./deleteUser.action')
 const { getUser } = require('./readUser.action')
 const { updateUser } = require('./updateUser.action')
+const { createToken } = require('../utils/authentication')
 
 const UserModel = require("./user.model")
 
@@ -45,27 +46,27 @@ async function signUp(userData) {
     }
 }
 
-async function login(email, password) {
-    try {
-    
-        const UserData = await getUser(email, "email");
+async function login(params) {
+    const { email, password } = params;
 
-        if (await argon2.verify(UserData.password, password)) {
+    if (!email || !password) {
+        return { value: { error: "Incomplete data" }, code: 400 };
+    }
 
-            const token = jwt.sign({ userId: UserData._id }, keyJWT, { expiresIn: '30d' });
-            console.log('Contraseña correcta');
+    const userData = await getUser(email, "email");
 
-            console.log(token)
-            return token;
-        } else {
-            throw new Error('Contraseña incorrecta');
-        }
+    if (!userData) {
+        return { value: { error: "User not found" }, code: 404 };
+    }
 
-    } catch (error) {
-        console.error('Error de autenticación:', error.message);
-        throw error;
+    if (await argon2.verify(userData.password, password)) {
+        const token = await createToken({ userId: userData._id })
+        return { value: { authorization: token }, code: 200 };
+    } else {
+        return { value: { error: "Incorrect password" }, code: 401 };
     }
 }
+
 
 async function updateUserData(token, newData) {
     try {
@@ -154,4 +155,6 @@ tokenn2="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjNmZGYzOGNmNjRhOT
 //getUserData(tokenn)
 //getUserBooks(tokenn)
 
-login("smsaenz@example.com","elgatico")
+module.exports={
+    login
+}

@@ -1,13 +1,16 @@
 const express = require('express');
+
 const router = express.Router();
+const { login } = require('./user.controller')
 
-
-const getUsersGeneric = async () => {
-  return [
-    { id: 1, name: 'User 1', age: 25 },
-    { id: 2, name: 'User 2', age: 30 },
-    { id: 3, name: 'User 3', age: 28 }
-  ];
+const LoginUser = async (req, res) => {
+  try {
+    
+    outValue = await login(req.body)
+    res.status(outValue.code).json(outValue.value)
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching users' });
+  }
 };
 
 const GetUser = async (req, res) => {
@@ -45,6 +48,7 @@ const DeleteUser = async (req, res) => {
 };
 
 router.get("/", GetUser);
+router.post("/login", LoginUser);
 router.post("/", PostUser);
 router.patch("/", PatchUsers);
 router.delete("/:id", DeleteUser);
