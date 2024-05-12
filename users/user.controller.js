@@ -7,43 +7,24 @@ const { getUser } = require('./readUser.action')
 const { updateUser } = require('./updateUser.action')
 const { createToken } = require('../utils/authentication')
 
-const UserModel = require("./user.model")
-
-keyJWT="e3c6bedeefc5043740ecd268d679f522" //pasar a env
-
-function tokenVerification(token) { //pasar a una carpeta de funciones
-    try {
-        
-        return jwt.verify(token, keyJWT)
-    } catch (error) {
-        
-        return undefined
-    }
-}
-
 async function signUp(userData) {
-    try {
-        const validationResult = await UserModel.validate(userData)
 
-        if (validationResult.error) {
-            throw new Error(`Error de Validacion: ${validationResult.error.message}`)
-        }
+    const { name, lastname, email, password } = userData
 
-        const hashedPassword = await argon2.hash(userData.password)
-
-        userData.password = hashedPassword 
-
-        const newUser = await createUser(userData)
-
-        console.log(newUser)
-
-        const token = jwt.sign({ userId: newUser._id }, keyJWT, { expiresIn: '30d' })
-        console.log(token)
-        return token
-    } catch (error) {
-        console.error('Error al crear el usuario:', error)
-        throw error
+    if (!email || !password || !name || !lastname) {
+        return { value: { error: "Incomplete data" }, code: 400 };
     }
+
+    if (await getUser(email, "email")) {
+        return { value: { error: "Email already exists" }, code: 409 };
+    }
+
+    const hashedPassword = await argon2.hash(userData.password)
+    userData.password = hashedPassword 
+    const newUser = await createUser(userData)
+    const token = await createToken({ userId: newUser._id })
+    return { value: { authorization: token ,message: 'User created successfully'}, code: 200 }
+    
 }
 
 async function login(params) {
@@ -61,100 +42,55 @@ async function login(params) {
 
     if (await argon2.verify(userData.password, password)) {
         const token = await createToken({ userId: userData._id })
-        return { value: { authorization: token }, code: 200 };
+        return { value: { authorization: token ,message: 'User login successfully'}, code: 200 };
     } else {
         return { value: { error: "Incorrect password" }, code: 401 };
     }
 }
 
+async function updateUserData(req) {
 
-async function updateUserData(token, newData) {
-    try {
-        const decodedToken = tokenVerification(token);
+    const { name, lastname, email, password } = req.body
 
-        if (!decodedToken) {
-            throw new Error('Token inválido o expirado');
-        }
+    if (!email && !password && !name && !lastname) {
+        return { value: { message: "No data provided for modification" }, code: 204 }
+    }
 
-        const userId = decodedToken.userId;
+    if (password){
+        const hashedPassword = await argon2.hash(password)
+        req.body.password = hashedPassword 
+    }
 
-        const userSchemaKeys = Object.keys(UserModel.schema.obj);
-
-        const newDataKeys = Object.keys(newData);
-        const invalidKeys = newDataKeys.filter(key => !userSchemaKeys.includes(key));
-
-        if (invalidKeys.length > 0) {
-            throw new Error(`Las siguientes keys no existen en el esquema de User: ${invalidKeys.join(', ')}`);
-        }
-
-        // Si todas las keys son válidas, proceder con la actualización
-        const updatedUser = await updateUser(userId, newData);
-
-        return updatedUser;
-    } catch (error) {
-        console.error('Error al actualizar los datos del usuario:', error);
-        throw error;
+    if (await updateUser(req.userId, req.body)){
+        return { value: {message: 'User updated successfully'}, code: 200 }
+    }else{
+        return { value: {message: 'User does not exist'}, code: 404 }
     }
 }
 
-async function deleteUser(token) {
-    try {
-
-        const decodedToken = tokenVerification(token)
-        if (!decodedToken) {
-            throw new Error('Token inválido o expirado')
-        }
-
-        const userId = decodedToken.userId
-
-        await softDeleteUser(userId)
-
-        return { message: 'Usuario eliminado exitosamente' }
-    } catch (error) {
-        console.error('Error al eliminar el usuario:', error)
-        throw error
-    }
-}
-
-async function getUserData(token) {
-    try {
+async function deleteUser(req) {
     
-        const decodedToken = tokenVerification(token)
-        if (!decodedToken) {
-            throw new Error('Token inválido o expirado')
-        }
-
-        const userId = decodedToken.userId
-
-        const UserData = await getUser(userId, "id");
-
-        console.log(UserData)
-        return UserData
-    } catch (error) {
-        console.error('Error al obtener los datos del usuario:', error)
-        throw error
+    if (await softDeleteUser(req.userId)){
+        return { value: {message: 'User deleted successfully'}, code: 200 }
+    }else{
+        return { value: {message: 'User does not exist'}, code: 404 }
     }
 }
 
-const userData = {
-    name: 'Samuel',
-    lastname: 'Saenz',
-    email: 'smsaenz@example.com',
-    password: 'elgatico',
-    books: [],
-    receivedOrders: [],
-    sentOrders: [],
-    softDelete: false
-}
+async function getUserData(req) {
 
-tokenn="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjNlOTYyY2NkYzhhNDk2NzdiMGU1MDIiLCJpYXQiOjE3MTUzNzkyMTgsImV4cCI6MTcxNzk3MTIxOH0.ovWdbygWxJWVXjq8iFDukamTjyVciwlOtLtNqN3pzsw"
-tokenn2="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjNmZGYzOGNmNjRhOTkwMjY2YWMzNDMiLCJpYXQiOjE3MTU0NjE5NDQsImV4cCI6MTcxODA1Mzk0NH0.JPbZGJAV9wiM8mLhRHOkZ5VMpPHolOt24ICqlBVLjwQ"
-//console.log(updateUserData(tokenn,{lastname:"Saenz Giraldo"}))
-//login("sdsaenz@example.com","elgatico")
-//deleteUser(tokenn)
-//getUserData(tokenn)
-//getUserBooks(tokenn)
+    const userData = await getUser(req.userId,"id")
+    if (userData){
+        return { value: {userData : userData}, code: 200 }
+    }else{
+        return { value: {message: 'User does not exist'}, code: 404 }
+    }
+}
 
 module.exports={
-    login
+    login,
+    signUp,
+    updateUserData,
+    deleteUser,
+    getUserData
 }

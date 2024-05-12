@@ -13,9 +13,6 @@ async function getUser(identifier, type) {
             query = { email: identifier, softDelete: false }
         } else if (type === 'id') {
             query = { _id: identifier, softDelete: false }
-        } else {
-            console.log('Tipo de búsqueda no válido')
-            return null
         }
 
         const user = await User.findOne(query).select('-softDelete')

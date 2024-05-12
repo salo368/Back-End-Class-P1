@@ -5,9 +5,9 @@ const userSchema = new mongoose.Schema({
     lastname: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    books: [mongoose.Schema.Types.ObjectId],
-    receivedOrders: [mongoose.Schema.Types.ObjectId],
-    sentOrders: [mongoose.Schema.Types.ObjectId],
+    // books: [mongoose.Schema.Types.ObjectId],
+    // receivedOrders: [mongoose.Schema.Types.ObjectId],
+    //sentOrders: [mongoose.Schema.Types.ObjectId],
     softDelete: { type: Boolean, default: false }
 }, { versionKey: false })
 

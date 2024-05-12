@@ -13,14 +13,15 @@ const tokenVerification = async (req, res, next) => {
         return res.status(401).json({ error: 'Without authentication' });
     }
 
+    
     try {
         decodedToken = jwt.verify(token, keyJWT)
+        req.userId = decodedToken.userId
+        next()
     } catch (error) {
         res.status(403).json({ error: 'Invalid authentication token' });
     }
 
-    req.userId = decodedToken.userId
-    next()
 }
 
 const createToken = async (tokenData) => {
