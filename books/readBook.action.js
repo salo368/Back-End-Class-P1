@@ -3,32 +3,22 @@ const Book = require("./book.model")
 
 async function getBook(id) {
     try {
-        await mongoose.connect('mongodb+srv://salomonAdmin:o3Iw3Q9TpK09rSNU@backendclass.4l7vjkd.mongodb.net/backEndClass',{
-            dbName: 'backEndClass' 
-        })
-
+        
         const book = await Book.findOne({ _id: id, softDelete: false }).select('-softDelete')
 
         if (!book) {
-            console.log('Libro no encontrado')
             return null
         }
 
-        console.log('Libro encontrado:', book)
         return book
     } catch (error) {
-        console.error('Error al obtener libro:', error)
         return null
-    } finally {
-        mongoose.disconnect()
     }
 }
 
 async function getBooksByIds(ids) {
     try {
-        await mongoose.connect('mongodb+srv://salomonAdmin:o3Iw3Q9TpK09rSNU@backendclass.4l7vjkd.mongodb.net/backEndClass',{
-            dbName: 'backEndClass' 
-        })
+        
 
         const books = await Book.find({ _id: { $in: ids }, softDelete: false }).select('-softDelete')
 
@@ -40,36 +30,28 @@ async function getBooksByIds(ids) {
         console.log('Libros encontrados:', books)
         return books
     } catch (error) {
-        console.error('Error al obtener libros:', error)
-        return []
-    } finally {
-        mongoose.disconnect()
-    }
+        return null
+    } 
 }
 
 async function getBooks(filterData) {
     try {
-        await mongoose.connect('mongodb+srv://salomonAdmin:o3Iw3Q9TpK09rSNU@backendclass.4l7vjkd.mongodb.net/backEndClass',{
-            dbName: 'backEndClass' 
-        })
+       
 
         const books = await Book.find({ ...filterData, softDelete: false }).select('-softDelete')
 
         if (books.length === 0) {
-            console.log('No se encontraron libros con el filtro especificado')
-            return []
+            return "picha"
         }
 
-        console.log('Libros encontrados:', books)
+        
         return books
     } catch (error) {
-        console.error('Error al obtener libros:', error)
-        return []
-    } finally {
-        mongoose.disconnect()
-    }
+        
+        return null
+    } 
 }
 
 
 
-module.exports = {getBook, getBooks,getBooksByIds}
+module.exports = {getBook, getBooks, getBooksByIds}
