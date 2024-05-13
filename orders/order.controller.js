@@ -71,7 +71,49 @@ async function updateOrderStatus(req){
     }
 }
 
+async function getOrderById(req){
+ 
+    const {orderId} = req.query
+
+    if ( !orderId ){
+        return { value: { message: "No order id provided" }, code: 400 }
+    }
+    
+    const orderData = await getOrder(orderId)
+
+    if (!orderData){
+        return { value: {message: 'Order Id does not exist'}, code: 404 }
+    }
+
+    return { value: {orderData: orderData}, code: 200 }
+}
+
+async function deleteOrder(req){
+
+    const {orderId} = req.query
+
+    if (!orderId){
+        return { value: { message: "No order id provided for modification" }, code: 404 }
+    }
+
+    const orderData = await getBook(orderId)
+
+    if (!orderData){
+        return { value: {message: 'Order Id does not exist'}, code: 404 }
+    }
+
+    if (!(orderData.receiverId.toString()===req.userId || orderData.senderId.toString()===req.userId)){
+        return { value: {message: "Not user's order"}, code: 403 }
+    }
+
+    await softDeleteOrder(orderId)
+    return { value: {message: 'Order deleted successfully'}, code: 200 }
+
+}
+
 module.exports = {
     createNewOrder,
-    updateOrderStatus
+    updateOrderStatus,
+    getOrderById,
+    deleteOrder
 }

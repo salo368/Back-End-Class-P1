@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const { tokenVerification } = require('../utils/authentication');
-const {createNewOrder, updateOrderStatus} = require('./order.controller');
+const {createNewOrder, updateOrderStatus, getOrderById, deleteOrder} = require('./order.controller');
 
 const CreateOrder = async (req, res) => { 
     try {
@@ -24,7 +24,7 @@ const PatchOrder = async (req, res) => {
 
 const GetOrder = async (req, res) => { 
     try {
-        const outValue = await getBookById(req); 
+        const outValue = await getOrderById(req); 
         res.status(outValue.code).json(outValue.value);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching book' });
@@ -51,7 +51,7 @@ const GetReceiverOrders = async (req, res) => {
 
 const DeleteOrder = async (req, res) => { 
     try {
-        const outValue = await getBookById(req); 
+        const outValue = await deleteOrder(req); 
         res.status(outValue.code).json(outValue.value);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching book' });
@@ -61,7 +61,7 @@ const DeleteOrder = async (req, res) => {
 
 router.get("/", tokenVerification, GetOrder);
 router.get("/send", tokenVerification, GetSenderOrders);
-router.get("/receiver", tokenVerification, GetReceiverOrders);
+router.get("/receive", tokenVerification, GetReceiverOrders);
 router.post("/", tokenVerification, CreateOrder);
 router.patch("/", tokenVerification, PatchOrder);
 router.delete("/", tokenVerification, DeleteOrder);

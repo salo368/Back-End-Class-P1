@@ -13,16 +13,12 @@ async function getOrder(id) {
 
         return order
     } catch (error) {
-        console.error('Error al obtener orden:', error)
         return null
     } 
 }
 
 async function getOrders(filterData) {
     try {
-        await mongoose.connect('mongodb+srv://salomonAdmin:o3Iw3Q9TpK09rSNU@backendclass.4l7vjkd.mongodb.net/backEndClass',{
-            dbName: 'backEndClass' 
-        })
 
         const books = await Order.find({ ...filterData, softDelete: false }).select('-softDelete')
 
@@ -36,9 +32,7 @@ async function getOrders(filterData) {
     } catch (error) {
         console.error('Error al obtener libros:', error)
         return []
-    } finally {
-        mongoose.disconnect()
-    }
+    } 
 }
 
 
