@@ -102,7 +102,12 @@ async function getBooksListByFilter(req) {
     });
 
     const books = await getBooks(filter)
-    return { value: {bookDatas: books}, code: 200 }
+    if (!books){
+        return { value: {message: "There are no books with this filter"}, code: 200 }
+    }else{
+        return { value: {bookDatas: books}, code: 200 }
+    }
+    
 }
 
 async function deleteBook(req) {

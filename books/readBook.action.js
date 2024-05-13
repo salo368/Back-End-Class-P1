@@ -41,7 +41,7 @@ async function getBooks(filterData) {
         const books = await Book.find({ ...filterData, softDelete: false }).select('-softDelete')
 
         if (books.length === 0) {
-            return "picha"
+            return null
         }
 
         
