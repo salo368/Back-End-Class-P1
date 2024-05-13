@@ -23,21 +23,21 @@ async function updateBookData(req) {
     const {name,genre,publicationYear,publisher,author,price,bookId} = req.query
 
     if (!bookId){
-        return { value: { message: "No book id provided for modification" }, code: 404 }
+        return { value: { error: "No book id provided for modification" }, code: 400 }
     }
 
     if (!name && !genre && !publicationYear && !publisher && !author && !price) {
-        return { value: { message: "No data provided for modification" }, code: 404 }
+        return { value: { error: "No data provided for modification" }, code: 400 }
     }   
 
     const bookData = await getBook(bookId)
 
     if (!bookData){
-        return { value: {message: 'Book Id does not exist'}, code: 404 }
+        return { value: { error: 'Book Id does not exist'}, code: 404 }
     }
 
     if (bookData.ownerId != req.userId){
-        return { value: {message: "Not user's book"}, code: 403 }
+        return { value: { error: "Not user's book"}, code: 403 }
     }
 
     await updateBook(bookId,req.query)
@@ -50,13 +50,13 @@ async function getBookById(req) {
     const {bookId} = req.query
 
     if (!bookId){
-        return { value: { message: "No book id provided" }, code: 404 }
+        return { value: { error: "No book id provided" }, code: 400 }
     }
 
     const bookData = await getBook(bookId)
 
     if (!bookData){
-        return { value: {message: 'Book Id does not exist'}, code: 404 }
+        return { value: { error: 'Book Id does not exist'}, code: 404 }
     }
 
     return { value: {bookData: bookData}, code: 200 }
@@ -68,11 +68,11 @@ async function getBooksUserList(req) {
     const {ownerId} = req.query
 
     if (!ownerId){
-        return { value: { message: "No user id provided" }, code: 404 }
+        return { value: { error: "No user id provided" }, code: 400 }
     }
 
     if (!await getUser(ownerId)){
-        return { value: {message: 'User Id does not exist'}, code: 404 }
+        return { value: { error: 'User Id does not exist'}, code: 404 }
     }
 
     const books = await getBooks({ownerId: ownerId})
@@ -90,7 +90,7 @@ async function getBooksListByFilter(req) {
     const {name,genre,publicationYear,publisher,author} = req.query
     
     if (!name && !genre && !publicationYear && !publisher && !author) {
-        return { value: { message: "No data provided for modification" }, code: 404 }
+        return { value: { error: "No data provided for modification" }, code: 400 }
     } 
 
     const filter = {}
@@ -115,17 +115,17 @@ async function deleteBook(req) {
     const {bookId} = req.query
 
     if (!bookId){
-        return { value: { message: "No book id provided for modification" }, code: 404 }
+        return { value: { error: "No book id provided for modification" }, code: 400 }
     }
 
     const bookData = await getBook(bookId)
 
     if (!bookData){
-        return { value: {message: 'Book Id does not exist'}, code: 404 }
+        return { value: { error: 'Book Id does not exist'}, code: 404 }
     }
 
     if (bookData.ownerId != req.userId){
-        return { value: {message: "Not user's book"}, code: 403 }
+        return { value: { error: "Not user's book"}, code: 403 }
     }
 
     await softDeleteBook(bookId)

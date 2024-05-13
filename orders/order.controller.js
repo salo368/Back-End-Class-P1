@@ -17,13 +17,13 @@ async function createNewOrder(req) {
     }
 
     if (req.userId === senderId){
-        return { value: { error: "Can't order to your self" }, code: 404 }
+        return { value: { error: "Can't order to your self" }, code: 400 }
     }
     
     const booksData = await getBooksByIds(bookIds,senderId)
     
     if (!booksData){
-        return { value: { error: "Invalid book id list" }, code: 403 }
+        return { value: { error: "Invalid book id list" }, code: 404 }
     }
 
     req.query.receiverId = req.userId
@@ -38,26 +38,26 @@ async function updateOrderStatus(req){
     const {status, orderId} = req.query
 
     if (!status || !orderId ){
-        return { value: { message: "Incomplete data" }, code: 400 }
+        return { value: { error: "Incomplete data" }, code: 400 }
     }
 
     if (!(status==="completado" || status==="cancelado")){
-        return { value: { message: "Invalid order status" }, code: 400 }
+        return { value: { error: "Invalid order status" }, code: 400 }
     }
 
     const orderData = await getOrder(orderId)
 
     if (!(orderData.receiverId.toString()===req.userId || orderData.senderId.toString()===req.userId)){
-        return { value: {message: "Not user's order"}, code: 403 }
+        return { value: { error: "Not user's order"}, code: 403 }
     }
 
     if (status==="cancelado"){
         await updateOrder(orderId, {status: "cancelado"})
-        return { value: {message: 'Order canceled successfully'}, code: 200 }
+        return { value: { error: 'Order canceled successfully'}, code: 200 }
     }
 
     if (status==="completado" && orderData.receiverId.toString()===req.userId){
-        return { value: {message: "Only owner can complete the order"}, code: 403 }
+        return { value: { error: "Only owner can complete the order"}, code: 403 }
     }
 
     if (status==="completado" && orderData.senderId.toString()===req.userId){
@@ -74,13 +74,13 @@ async function getOrderById(req){
     const {orderId} = req.query
 
     if ( !orderId ){
-        return { value: { message: "No order id provided" }, code: 400 }
+        return { value: { error: "No order id provided" }, code: 400 }
     }
     
     const orderData = await getOrder(orderId)
 
     if (!orderData){
-        return { value: {message: 'Order Id does not exist'}, code: 404 }
+        return { value: { error: 'Order Id does not exist'}, code: 404 }
     }
 
     return { value: {orderData: orderData}, code: 200 }
@@ -91,17 +91,17 @@ async function deleteOrder(req){
     const {orderId} = req.query
 
     if (!orderId){
-        return { value: { message: "No order id provided for modification" }, code: 404 }
+        return { value: { error: "No order id provided for modification" }, code: 400 }
     }
 
     const orderData = await getOrder(orderId)
 
     if (!orderData){
-        return { value: {message: 'Order Id does not exist'}, code: 404 }
+        return { value: { error: 'Order Id does not exist'}, code: 404 }
     }
 
     if (!(orderData.receiverId.toString()===req.userId || orderData.senderId.toString()===req.userId)){
-        return { value: {message: "Not user's order"}, code: 403 }
+        return { value: { error: "Not user's order"}, code: 403 }
     }
 
     await softDeleteOrder(orderId)
@@ -115,7 +115,7 @@ async function getSendOrders(req){
     const {endDate,startDate} = req.query
     
     if ((!endDate && startDate) || (endDate && !startDate)){
-        return { value: { message: "Both dates have to be provided" }, code: 404 }
+        return { value: { error: "Both dates have to be provided" }, code: 400 }
     }
 
     const filter = {}
@@ -142,7 +142,7 @@ async function getReceiveOrders(req){
     const {endDate,startDate} = req.query
     
     if ((!endDate && startDate) || (endDate && !startDate)){
-        return { value: { message: "Both dates have to be provided" }, code: 404 }
+        return { value: { error: "Both dates have to be provided" }, code: 400 }
     }
 
     const filter = {}
@@ -156,7 +156,7 @@ async function getReceiveOrders(req){
     const ordersData = await getOrders(filter)
 
     if (!ordersData){
-        return { value: {message: "There are no orders with this filter"}, code: 200 }
+        return { value: { message: "There are no orders with this filter"}, code: 200 }
     }else{
         return { value: {ordersData: ordersData}, code: 200 }
     }

@@ -9,7 +9,7 @@ const CreateOrder = async (req, res) => {
         const outValue = await createNewOrder(req) 
         res.status(outValue.code).json(outValue.value)
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching book' })
+        res.status(500).json({ error: 'Error creating book' })
     }
 }
 
@@ -18,7 +18,7 @@ const PatchOrder = async (req, res) => {
         const outValue = await updateOrderStatus(req) 
         res.status(outValue.code).json(outValue.value)
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching book' })
+        res.status(500).json({ error: 'Error updating book' })
     }
 }
 
@@ -55,7 +55,7 @@ const DeleteOrder = async (req, res) => {
         res.status(outValue.code).json(outValue.value)
     } catch (error) {
         console.log(error)
-        res.status(500).json({ error: 'Error fetching book' })
+        res.status(500).json({ error: 'Error deleting book' })
     }
 }
 

@@ -53,7 +53,7 @@ async function updateUserData(req) {
     const { name, lastname, email, password } = req.body
 
     if (!email && !password && !name && !lastname) {
-        return { value: { message: "No data provided for modification" }, code: 204 }
+        return { value: { error: "No data provided for modification" }, code: 400 }
     }
 
     if (password){
@@ -64,7 +64,7 @@ async function updateUserData(req) {
     if (await updateUser(req.userId, req.body)){
         return { value: {message: 'User updated successfully'}, code: 200 }
     }else{
-        return { value: {message: 'User does not exist'}, code: 404 }
+        return { value: { error: 'User does not exist'}, code: 404 }
     }
 }
 
@@ -73,7 +73,7 @@ async function deleteUser(req) {
     if (await softDeleteUser(req.userId)){
         return { value: {message: 'User deleted successfully'}, code: 200 }
     }else{
-        return { value: {message: 'User does not exist'}, code: 404 }
+        return { value: {error: 'User does not exist'}, code: 404 }
     }
 }
 
@@ -83,7 +83,7 @@ async function getUserData(req) {
     if (userData) {
         return { value: { userData: userData }, code: 200 }
     } else {
-        return { value: { message: 'User does not exist' }, code: 404 }
+        return { value: { error: 'User does not exist' }, code: 404 }
     }
 }
 

@@ -18,7 +18,7 @@ const GetBooks = async (req, res) => {
     const outValue = await getBooksListByFilter(req) 
     res.status(outValue.code).json(outValue.value)
   } catch (error) {
-    res.status(500).json({ error: 'Error creating user' })
+    res.status(500).json({ error: 'Error fetching books' })
   }
 }
 
@@ -27,7 +27,7 @@ const GetUserBooks = async (req, res) => {
       const outValue = await getBooksUserList(req) 
       res.status(outValue.code).json(outValue.value)
     } catch (error) {
-      res.status(500).json({ error: 'Error creating book' })
+      res.status(500).json({ error: 'Error fetching book' })
     }
 }
 
@@ -46,7 +46,7 @@ const DeleteBook = async (req, res) => { //Solo se utiliza el JWT
     const outValue = await deleteBook(req) 
     res.status(outValue.code).json(outValue.value)
   } catch (error) {
-    res.status(500).json({ error: 'Error deleting user' })
+    res.status(500).json({ error: 'Error deleting book' })
   }
 }
 
@@ -55,7 +55,7 @@ const CreateBook = async (req, res) => {
     const outValue = await createNewBook(req) 
     res.status(outValue.code).json(outValue.value)
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching users' })
+    res.status(500).json({ error: 'Error creating book' })
   }
 }
 
