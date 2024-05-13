@@ -133,7 +133,6 @@ async function deleteBook(req) {
 
 }
 
-
 module.exports = {
     createNewBook,
     updateBookData,

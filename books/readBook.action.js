@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+
 const Book = require("./book.model")
 
 async function getBook(id) {
@@ -22,14 +22,14 @@ async function getBooksByIds(ids) {
 
         const books = await Book.find({ _id: { $in: ids }, softDelete: false }).select('-softDelete')
 
-        if (!books || books.length === 0) {
-            console.log('Ningún libro encontrado con los IDs proporcionados')
-            return []
+        if (ids.length !== books.length) {
+            return null
         }
 
-        console.log('Libros encontrados:', books)
+        
         return books
     } catch (error) {
+        console.log(error)
         return null
     } 
 }
@@ -44,7 +44,6 @@ async function getBooks(filterData) {
             return null
         }
 
-        
         return books
     } catch (error) {
         

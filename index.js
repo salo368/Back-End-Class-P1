@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose'); 
 const routesUsers = require('./users/user.route');
 const routesBooks = require('./books/book.route');
+const routesOrders = require('./orders/order.route');
 
 const app = express();
 app.use(express.json());
@@ -21,6 +22,7 @@ mongoose.connect('mongodb+srv://salomonAdmin:o3Iw3Q9TpK09rSNU@backendclass.4l7vj
 
 app.use('/user', routesUsers);
 app.use('/book', routesBooks);
+app.use('/order', routesOrders);
 
 app.listen(3000, () => {
   console.log(`Servidor escuchando en el puerto 3000`);

@@ -20,4 +20,19 @@ async function softDeleteBook(id) {
     } 
 }
 
-module.exports = {softDeleteBook}
+async function softDeleteBooks(ids) {
+    try {
+        const books = await Book.updateMany({ _id: { $in: ids }, softDelete: false }, { $set: { softDelete: true } }, { new: true }).select('-softDelete');
+
+        if (!books) {
+            return null;
+        }
+
+        return books;
+    } catch (error) {
+        return null;
+    }
+}
+
+
+module.exports = {softDeleteBook,softDeleteBooks}
