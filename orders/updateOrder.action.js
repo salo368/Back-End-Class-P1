@@ -13,7 +13,7 @@ async function updateOrder(id, updatedOrder) {
         
         return order
     } catch (error) {
-        console.error('Error al actualizar orden:', error)
+        
         return null
     } 
 }

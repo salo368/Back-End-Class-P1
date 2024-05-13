@@ -13,7 +13,7 @@ async function updateBook(id, updatedBook) {
 
         return book
     } catch (error) {
-        console.error('Error al actualizar libro:', error)
+        
         return null
     } 
 }

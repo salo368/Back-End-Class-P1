@@ -27,7 +27,7 @@ async function getBooksByIds(ids,ownerId) {
 
         return books
     } catch (error) {
-        console.log(error)
+        
         return null
     } 
 }
