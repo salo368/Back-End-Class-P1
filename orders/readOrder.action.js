@@ -18,21 +18,25 @@ async function getOrder(id) {
 }
 
 async function getOrders(filterData) {
+
     try {
-
-        const books = await Order.find({ ...filterData, softDelete: false }).select('-softDelete')
-
-        if (books.length === 0) {
-            console.log('No se encontraron libros con el filtro especificado')
-            return []
+        let {startDate,endDate,...otherdata} = filterData
+        otherdata.softDelete=false
+        if (filterData.startDate && filterData.endDate){
+            otherdata.creationDate = {$gte: new Date(filterData.startDate),$lte: new Date(filterData.endDate)}
         }
 
-        console.log('Libros encontrados:', books)
-        return books
+        const orders = await Order.find(otherdata).select('-softDelete');
+
+        if (orders.length === 0) {
+            return null
+        }
+
+        return orders
     } catch (error) {
-        console.error('Error al obtener libros:', error)
-        return []
+        return null
     } 
+
 }
 
 

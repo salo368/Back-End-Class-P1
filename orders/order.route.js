@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const { tokenVerification } = require('../utils/authentication');
-const {createNewOrder, updateOrderStatus, getOrderById, deleteOrder} = require('./order.controller');
+const {createNewOrder, updateOrderStatus, getOrderById, deleteOrder, getSendOrders, getReceiveOrders} = require('./order.controller');
 
 const CreateOrder = async (req, res) => { 
     try {
@@ -33,7 +33,7 @@ const GetOrder = async (req, res) => {
 
 const GetSenderOrders = async (req, res) => { 
     try {
-        const outValue = await getBookById(req); 
+        const outValue = await getSendOrders(req); 
         res.status(outValue.code).json(outValue.value);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching book' });
@@ -42,7 +42,7 @@ const GetSenderOrders = async (req, res) => {
 
 const GetReceiverOrders = async (req, res) => { 
     try {
-        const outValue = await getBookById(req); 
+        const outValue = await getReceiveOrders(req); 
         res.status(outValue.code).json(outValue.value);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching book' });
@@ -54,6 +54,7 @@ const DeleteOrder = async (req, res) => {
         const outValue = await deleteOrder(req); 
         res.status(outValue.code).json(outValue.value);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: 'Error fetching book' });
     }
 };

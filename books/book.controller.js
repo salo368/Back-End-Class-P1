@@ -105,7 +105,7 @@ async function getBooksListByFilter(req) {
     if (!books){
         return { value: {message: "There are no books with this filter"}, code: 200 }
     }else{
-        return { value: {bookDatas: books}, code: 200 }
+        return { value: {booksData: books}, code: 200 }
     }
     
 }

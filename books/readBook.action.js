@@ -16,17 +16,15 @@ async function getBook(id) {
     }
 }
 
-async function getBooksByIds(ids) {
+async function getBooksByIds(ids,ownerId) {
     try {
         
-
-        const books = await Book.find({ _id: { $in: ids }, softDelete: false }).select('-softDelete')
-
+        const books = await Book.find({ _id: { $in: ids }, softDelete: false ,ownerId: ownerId}).select('-softDelete')
+        
         if (ids.length !== books.length) {
             return null
         }
 
-        
         return books
     } catch (error) {
         console.log(error)

@@ -8,7 +8,6 @@ async function createOrder(order) {
 
         await newOrder.save()
 
-        console.log('Orden creada exitosamente')
     } catch (error) {
         console.error('Error al crear orden:', error)
     } 

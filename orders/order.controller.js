@@ -1,6 +1,4 @@
 
-const jwt = require('jsonwebtoken')
-
 const {createOrder} = require('./createOrder.action')
 const {updateOrder} = require('./updateOrder.action')
 const {softDeleteOrder} = require('./deleteOrder.action')
@@ -22,10 +20,10 @@ async function createNewOrder(req) {
         return { value: { error: "Can't order to your self" }, code: 404 };
     }
     
-    const booksData = await getBooksByIds(bookIds)
+    const booksData = await getBooksByIds(bookIds,senderId)
     
     if (!booksData){
-        return { value: { error: "Invalid book id list" }, code: 400 }
+        return { value: { error: "Invalid book id list" }, code: 403 }
     }
 
     req.query.receiverId = req.userId
@@ -63,7 +61,7 @@ async function updateOrderStatus(req){
     }
 
     if (status==="completado" && orderData.senderId.toString()===req.userId){
-        await updateOrder(orderId, {status: "completed"})
+        await updateOrder(orderId, {status: "completado"})
 
         await softDeleteBooks(orderData.bookIds)
 
@@ -96,7 +94,7 @@ async function deleteOrder(req){
         return { value: { message: "No order id provided for modification" }, code: 404 }
     }
 
-    const orderData = await getBook(orderId)
+    const orderData = await getOrder(orderId)
 
     if (!orderData){
         return { value: {message: 'Order Id does not exist'}, code: 404 }
@@ -111,9 +109,65 @@ async function deleteOrder(req){
 
 }
 
+async function getSendOrders(req){
+
+    req.query.senderId = req.userId
+    const {endDate,startDate} = req.query
+    
+    if ((!endDate && startDate) || (endDate && !startDate)){
+        return { value: { message: "Both dates have to be provided" }, code: 404 }
+    }
+
+    const filter = {}
+    const keysToInclude = ['senderId', 'status', 'endDate', 'startDate'];
+    keysToInclude.forEach(key => {
+        if (req.query.hasOwnProperty(key)) {
+            filter[key] = req.query[key];
+        }
+    });
+
+    const ordersData = await getOrders(filter);
+
+    if (!ordersData){
+        return { value: {message: "There are no orders with this filter"}, code: 200 }
+    }else{
+        return { value: {ordersData: ordersData}, code: 200 }
+    }
+
+}
+
+async function getReceiveOrders(req){
+
+    req.query.receiverId = req.userId
+    const {endDate,startDate} = req.query
+    
+    if ((!endDate && startDate) || (endDate && !startDate)){
+        return { value: { message: "Both dates have to be provided" }, code: 404 }
+    }
+
+    const filter = {}
+    const keysToInclude = ['receiverId', 'status', 'endDate', 'startDate'];
+    keysToInclude.forEach(key => {
+        if (req.query.hasOwnProperty(key)) {
+            filter[key] = req.query[key];
+        }
+    });
+
+    const ordersData = await getOrders(filter);
+
+    if (!ordersData){
+        return { value: {message: "There are no orders with this filter"}, code: 200 }
+    }else{
+        return { value: {ordersData: ordersData}, code: 200 }
+    }
+
+}
+
 module.exports = {
     createNewOrder,
     updateOrderStatus,
     getOrderById,
-    deleteOrder
+    deleteOrder,
+    getSendOrders,
+    getReceiveOrders
 }
