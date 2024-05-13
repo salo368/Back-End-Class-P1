@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+
 const Book = require("./book.model")
 
 async function softDeleteBook(id) {
@@ -22,15 +22,15 @@ async function softDeleteBook(id) {
 
 async function softDeleteBooks(ids) {
     try {
-        const books = await Book.updateMany({ _id: { $in: ids }, softDelete: false }, { $set: { softDelete: true } }, { new: true }).select('-softDelete');
+        const books = await Book.updateMany({ _id: { $in: ids }, softDelete: false }, { $set: { softDelete: true } }, { new: true }).select('-softDelete')
 
         if (!books) {
-            return null;
+            return null
         }
 
-        return books;
+        return books
     } catch (error) {
-        return null;
+        return null
     }
 }
 

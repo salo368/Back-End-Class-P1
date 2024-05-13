@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+
 const Order = require("./order.model")
 
 async function getOrder(id) {
@@ -26,7 +26,7 @@ async function getOrders(filterData) {
             otherdata.creationDate = {$gte: new Date(filterData.startDate),$lte: new Date(filterData.endDate)}
         }
 
-        const orders = await Order.find(otherdata).select('-softDelete');
+        const orders = await Order.find(otherdata).select('-softDelete')
 
         if (orders.length === 0) {
             return null

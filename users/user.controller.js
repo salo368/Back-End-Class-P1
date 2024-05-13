@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken')
+
 const argon2 = require('argon2')
 
 const { createUser } = require('./createUser.action')
@@ -12,11 +12,11 @@ async function signUp(userData) {
     const { name, lastname, email, password } = userData
 
     if (!email || !password || !name || !lastname) {
-        return { value: { error: "Incomplete data" }, code: 400 };
+        return { value: { error: "Incomplete data" }, code: 400 }
     }
 
     if (await getUser(email, "email")) {
-        return { value: { error: "Email already exists" }, code: 409 };
+        return { value: { error: "Email already exists" }, code: 409 }
     }
 
     const hashedPassword = await argon2.hash(userData.password)
@@ -28,23 +28,23 @@ async function signUp(userData) {
 }
 
 async function login(params) {
-    const { email, password } = params;
+    const { email, password } = params
 
     if (!email || !password) {
-        return { value: { error: "Incomplete data" }, code: 400 };
+        return { value: { error: "Incomplete data" }, code: 400 }
     }
 
-    const userData = await getUser(email, "email");
+    const userData = await getUser(email, "email")
 
     if (!userData) {
-        return { value: { error: "User not found" }, code: 404 };
+        return { value: { error: "User not found" }, code: 404 }
     }
 
     if (await argon2.verify(userData.password, password)) {
         const token = await createToken({ userId: userData._id })
-        return { value: { authorization: token ,message: 'User login successfully'}, code: 200 };
+        return { value: { authorization: token ,message: 'User login successfully'}, code: 200 }
     } else {
-        return { value: { error: "Incorrect password" }, code: 401 };
+        return { value: { error: "Incorrect password" }, code: 401 }
     }
 }
 
@@ -78,12 +78,12 @@ async function deleteUser(req) {
 }
 
 async function getUserData(req) {
-    const userData = await getUser(req.userId, "id");
+    const userData = await getUser(req.userId, "id")
     userData.password = undefined
     if (userData) {
-        return { value: { userData: userData }, code: 200 };
+        return { value: { userData: userData }, code: 200 }
     } else {
-        return { value: { message: 'User does not exist' }, code: 404 };
+        return { value: { message: 'User does not exist' }, code: 404 }
     }
 }
 

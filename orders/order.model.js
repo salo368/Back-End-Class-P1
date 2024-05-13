@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const orderSchema = new mongoose.Schema({
     address: { type: String, required: true },
@@ -8,8 +8,8 @@ const orderSchema = new mongoose.Schema({
     status: { type: String, default: 'en progreso' },
     creationDate: { type: Date, default: Date.now },
     softDelete: { type: Boolean, default: false }
-}, { versionKey: false });
+}, { versionKey: false })
 
-const OrderModel = mongoose.model('Order', orderSchema, 'orders');
+const OrderModel = mongoose.model('Order', orderSchema, 'orders')
 
-module.exports = OrderModel;
+module.exports = OrderModel

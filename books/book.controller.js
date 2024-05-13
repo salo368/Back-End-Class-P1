@@ -10,7 +10,7 @@ async function createNewBook(req) {
     const {name,genre,publicationYear,publisher,author,price} = req.query
 
     if (!name || !genre || !publicationYear || !publisher || !author || !price) {
-        return { value: { error: "Incomplete data" }, code: 400 };
+        return { value: { error: "Incomplete data" }, code: 400 }
     }
     req.query.ownerId = req.userId
     await createBook(req.query)
@@ -94,12 +94,12 @@ async function getBooksListByFilter(req) {
     } 
 
     const filter = {}
-    const keysToInclude = ['name', 'genre', 'publicationYear', 'publisher', 'author'];
+    const keysToInclude = ['name', 'genre', 'publicationYear', 'publisher', 'author']
     keysToInclude.forEach(key => {
         if (req.query.hasOwnProperty(key)) {
-            filter[key] = req.query[key];
+            filter[key] = req.query[key]
         }
-    });
+    })
 
     const books = await getBooks(filter)
     if (!books){

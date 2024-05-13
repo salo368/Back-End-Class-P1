@@ -1,6 +1,6 @@
 
 const jwt = require('jsonwebtoken')
-require('dotenv').config();
+require('dotenv').config()
 
 const keyJWT = process.env.JWT_KEY
 
@@ -10,7 +10,7 @@ const tokenVerification = async (req, res, next) => {
     const token = authorization && authorization.split(' ')[1]
 
     if (!token) {
-        return res.status(401).json({ error: 'Without authentication' });
+        return res.status(401).json({ error: 'Without authentication' })
     }
 
     
@@ -19,13 +19,13 @@ const tokenVerification = async (req, res, next) => {
         req.userId = decodedToken.userId
         next()
     } catch (error) {
-        res.status(403).json({ error: 'Invalid authentication token' });
+        res.status(403).json({ error: 'Invalid authentication token' })
     }
 
 }
 
 const createToken = async (tokenData) => {
-    return jwt.sign(tokenData, keyJWT, {expiresIn: '30d'});
+    return jwt.sign(tokenData, keyJWT, {expiresIn: '30d'})
 }
 
 module.exports = {

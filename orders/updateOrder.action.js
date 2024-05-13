@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+
 const Order = require("./order.model")
 
 async function updateOrder(id, updatedOrder) {

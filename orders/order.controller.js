@@ -13,11 +13,11 @@ async function createNewOrder(req) {
     const {address,senderId,bookIds} = req.query
 
     if (!address || !senderId || !bookIds) {
-        return { value: { error: "Incomplete data" }, code: 400 };
+        return { value: { error: "Incomplete data" }, code: 400 }
     }
 
     if (req.userId === senderId){
-        return { value: { error: "Can't order to your self" }, code: 404 };
+        return { value: { error: "Can't order to your self" }, code: 404 }
     }
     
     const booksData = await getBooksByIds(bookIds,senderId)
@@ -119,14 +119,14 @@ async function getSendOrders(req){
     }
 
     const filter = {}
-    const keysToInclude = ['senderId', 'status', 'endDate', 'startDate'];
+    const keysToInclude = ['senderId', 'status', 'endDate', 'startDate']
     keysToInclude.forEach(key => {
         if (req.query.hasOwnProperty(key)) {
-            filter[key] = req.query[key];
+            filter[key] = req.query[key]
         }
-    });
+    })
 
-    const ordersData = await getOrders(filter);
+    const ordersData = await getOrders(filter)
 
     if (!ordersData){
         return { value: {message: "There are no orders with this filter"}, code: 200 }
@@ -146,14 +146,14 @@ async function getReceiveOrders(req){
     }
 
     const filter = {}
-    const keysToInclude = ['receiverId', 'status', 'endDate', 'startDate'];
+    const keysToInclude = ['receiverId', 'status', 'endDate', 'startDate']
     keysToInclude.forEach(key => {
         if (req.query.hasOwnProperty(key)) {
-            filter[key] = req.query[key];
+            filter[key] = req.query[key]
         }
-    });
+    })
 
-    const ordersData = await getOrders(filter);
+    const ordersData = await getOrders(filter)
 
     if (!ordersData){
         return { value: {message: "There are no orders with this filter"}, code: 200 }
